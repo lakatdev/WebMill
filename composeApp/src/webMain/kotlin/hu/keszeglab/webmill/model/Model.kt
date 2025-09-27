@@ -1,4 +1,4 @@
-package hu.keszeglab.webmill
+package hu.keszeglab.webmill.model
 
 enum class Player {
     DARK, LIGHT;
