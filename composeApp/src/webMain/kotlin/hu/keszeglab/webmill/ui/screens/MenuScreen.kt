@@ -33,7 +33,7 @@ fun MenuScreen(
             modifier = Modifier.padding(bottom = 16.dp)
         )
         Text(
-            text = "Select your opponent and your pieces and begin playing!",
+            text = "Select your opponent and begin playing!",
             fontSize = 20.sp,
             color = MaterialTheme.colorScheme.onBackground,
             textAlign = TextAlign.Center,
@@ -41,7 +41,7 @@ fun MenuScreen(
         )
         Button(
             onClick = onStartClick,
-            modifier = Modifier.padding(16.dp).fillMaxWidth(0.4f).height(56.dp),
+            modifier = Modifier.padding(16.dp).height(56.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.primary
             )
