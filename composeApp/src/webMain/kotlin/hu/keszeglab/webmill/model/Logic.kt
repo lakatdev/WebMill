@@ -197,7 +197,7 @@ class Logic {
                 Position.all.filter { !gameState.isOccupied(it) }.toSet()
             }
             GameStatus.MOVE -> {
-                if (selectedPosition != null) return emptySet()
+                if (selectedPosition == null) return emptySet()
                 val playerPieceCount = gameState.numPieces(gameState.currentPlayer)
 
                 if (playerPieceCount == 3) {
