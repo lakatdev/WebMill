@@ -25,7 +25,7 @@ fun MenuScreen(
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Title",
+            text = "WebMill",
             fontSize = 48.sp,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.primary,
@@ -33,7 +33,7 @@ fun MenuScreen(
             modifier = Modifier.padding(bottom = 16.dp)
         )
         Text(
-            text = "Subtitle",
+            text = "Select your opponent and your pieces and begin playing!",
             fontSize = 20.sp,
             color = MaterialTheme.colorScheme.onBackground,
             textAlign = TextAlign.Center,
