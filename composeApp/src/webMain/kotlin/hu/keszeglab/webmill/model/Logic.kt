@@ -149,7 +149,7 @@ class Logic {
 
     private fun getMillsForPlayer(gameState: GameState, player: Player): List<List<Position>> {
         return possibleMills.filter { mill ->
-            mill.all { pos -> gameState.pieceAt(pos)!!.player == player }
+            mill.all { pos -> gameState.pieceAt(pos)?.player == player }
         }
     }
 
