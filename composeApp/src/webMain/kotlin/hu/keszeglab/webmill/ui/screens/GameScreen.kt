@@ -82,7 +82,29 @@ fun GameScreen(
                 gameState = gameState,
                 onNodeClick = { position ->
                     try {
-                        gameState = logic.makeMove(gameState, gameState.selectedPosition, position)
+                        when (gameState.status) {
+                            hu.keszeglab.webmill.model.GameStatus.MOVE -> {
+                                val clickedPiece = gameState.pieceAt(position)
+                                if (gameState.selectedPosition == null) {
+                                    if (clickedPiece?.player == gameState.currentPlayer) {
+                                        gameState = gameState.copy(
+                                            selectedPosition = position,
+                                            validMoves = logic.getValidMoves(gameState, position)
+                                        )
+                                    }
+                                } else if (gameState.selectedPosition == position) {
+                                    gameState = gameState.copy(
+                                        selectedPosition = null,
+                                        validMoves = emptySet()
+                                    )
+                                } else {
+                                    gameState = logic.makeMove(gameState, gameState.selectedPosition, position)
+                                }
+                            }
+                            else -> {
+                                gameState = logic.makeMove(gameState, gameState.selectedPosition, position)
+                            }
+                        }
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
@@ -242,6 +264,7 @@ fun MillBoard(
                         val boardPosition = Position(index / 8, index % 8)
                         val piece = gameState.pieceAt(boardPosition)
                         val isSelected = gameState.selectedPosition == boardPosition
+                        val isValidMove = gameState.validMoves.contains(boardPosition)
                         
                         Box(
                             modifier = Modifier
@@ -255,6 +278,7 @@ fun MillBoard(
                                     when {
                                         piece?.player == Player.DARK -> Color.Black
                                         piece?.player == Player.LIGHT -> Color.White
+                                        isValidMove -> Color.Green.copy(alpha = 0.6f)
                                         else -> MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)
                                     }
                                 )
@@ -266,6 +290,8 @@ fun MillBoard(
                                 .then(
                                     if (isSelected) {
                                         Modifier.border(3.dp, Color.Red, CircleShape)
+                                    } else if (isValidMove) {
+                                        Modifier.border(2.dp, Color.Green, CircleShape)
                                     } else Modifier
                                 )
                                 .clickable {

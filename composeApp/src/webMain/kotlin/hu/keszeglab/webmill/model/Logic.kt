@@ -155,8 +155,13 @@ class Logic {
 
     private fun updateGameStatus(gameState: GameState): GameState {
         val millsFormed = getMillsForPlayer(gameState, gameState.currentPlayer)
-        val newMills = millsFormed.filter { mill ->
-            !gameState.mills.any() { existingMill ->
+        val currentActiveMills = getMillsForPlayer(gameState, gameState.currentPlayer)
+        val previousActiveMills = gameState.mills.filter { mill ->
+            mill.all { pos -> gameState.pieceAt(pos)?.player == gameState.currentPlayer }
+        }
+        
+        val newMills = currentActiveMills.filter { mill ->
+            !previousActiveMills.any { existingMill ->
                 existingMill.toSet() == mill.toSet()
             }
         }
@@ -168,24 +173,34 @@ class Logic {
                     winner = getWinner(gameState)
                 )
             }
-            newMills.isNotEmpty() && gameState.status != GameStatus.REMOVE -> {
+            newMills.isNotEmpty() -> {
                 gameState.copy(
                     status = GameStatus.REMOVE,
-                    mills = gameState.mills + newMills.map { it }
+                    mills = currentActiveMills.toSet()
                 )
             }
             gameState.status == GameStatus.REMOVE -> {
                 val allPlaced = gameState.piecesToPlace.values.all { it == 0 }
+                val activeMills = mutableSetOf<List<Position>>()
+                activeMills.addAll(getMillsForPlayer(gameState, Player.DARK))
+                activeMills.addAll(getMillsForPlayer(gameState, Player.LIGHT))
+                
                 gameState.copy(
                     status = if (allPlaced) GameStatus.MOVE else GameStatus.PLACE,
-                    currentPlayer = gameState.currentPlayer.opponent
+                    currentPlayer = gameState.currentPlayer.opponent,
+                    mills = activeMills
                 )
             }
             else -> {
                 val allPlaced = gameState.piecesToPlace.values.all { it == 0 }
+                val activeMills = mutableSetOf<List<Position>>()
+                activeMills.addAll(getMillsForPlayer(gameState, Player.DARK))
+                activeMills.addAll(getMillsForPlayer(gameState, Player.LIGHT))
+                
                 gameState.copy(
                     status = if (allPlaced) GameStatus.MOVE else GameStatus.PLACE,
-                    currentPlayer = gameState.currentPlayer.opponent
+                    currentPlayer = gameState.currentPlayer.opponent,
+                    mills = activeMills
                 )
             }
         }
