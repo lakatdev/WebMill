@@ -127,7 +127,7 @@ class Logic {
                 }
             }
             GameStatus.REMOVE -> {
-                val pieceIndex = newPieces.indexOfFirst { it.position == from }
+                val pieceIndex = newPieces.indexOfFirst { it.position == to }
                 if (pieceIndex >= 0) {
                     newPieces.removeAt(pieceIndex)
                 }
