@@ -185,11 +185,20 @@ class Logic {
                 activeMills.addAll(getMillsForPlayer(gameState, Player.DARK))
                 activeMills.addAll(getMillsForPlayer(gameState, Player.LIGHT))
                 
-                gameState.copy(
+                val newGameState = gameState.copy(
                     status = if (allPlaced) GameStatus.MOVE else GameStatus.PLACE,
                     currentPlayer = gameState.currentPlayer.opponent,
                     mills = activeMills
                 )
+                
+                if (isGameOver(newGameState)) {
+                    newGameState.copy(
+                        status = GameStatus.FINISHED,
+                        winner = getWinner(newGameState)
+                    )
+                } else {
+                    newGameState
+                }
             }
             else -> {
                 val allPlaced = gameState.piecesToPlace.values.all { it == 0 }
@@ -197,11 +206,20 @@ class Logic {
                 activeMills.addAll(getMillsForPlayer(gameState, Player.DARK))
                 activeMills.addAll(getMillsForPlayer(gameState, Player.LIGHT))
                 
-                gameState.copy(
+                val newGameState = gameState.copy(
                     status = if (allPlaced) GameStatus.MOVE else GameStatus.PLACE,
                     currentPlayer = gameState.currentPlayer.opponent,
                     mills = activeMills
                 )
+                
+                if (isGameOver(newGameState)) {
+                    newGameState.copy(
+                        status = GameStatus.FINISHED,
+                        winner = getWinner(newGameState)
+                    )
+                } else {
+                    newGameState
+                }
             }
         }
     }
