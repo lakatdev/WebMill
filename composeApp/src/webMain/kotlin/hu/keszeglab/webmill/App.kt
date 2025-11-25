@@ -19,14 +19,16 @@ fun App() {
         when (currentScreen) {
             is Screen.Menu -> {
                 MenuScreen(
-                    onStartClick = {
-                        screenManager.navigateToGame()
+                    onStartClick = { isVsComputer, smartness ->
+                        screenManager.navigateToGame(isVsComputer, smartness)
                     },
                     modifier = Modifier.fillMaxSize().safeContentPadding()
                 )
             }
             is Screen.Game -> {
                 GameScreen(
+                    isVsComputer = (currentScreen as Screen.Game).isVsComputer,
+                    computerSmartness = (currentScreen as Screen.Game).computerSmartness,
                     onBackToStart = {
                         screenManager.navigateToMenu()
                     },

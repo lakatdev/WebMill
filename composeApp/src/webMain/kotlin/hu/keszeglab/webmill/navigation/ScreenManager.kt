@@ -14,8 +14,8 @@ class ScreenManager {
         navigateTo(Screen.Menu)
     }
 
-    fun navigateToGame() {
-        navigateTo(Screen.Game)
+    fun navigateToGame(isVsComputer: Boolean = false, smartness: Int = 0) {
+        navigateTo(Screen.Game(isVsComputer, smartness))
     }
 }
 

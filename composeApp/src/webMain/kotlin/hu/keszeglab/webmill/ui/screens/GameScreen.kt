@@ -25,6 +25,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,10 +49,26 @@ import hu.keszeglab.webmill.model.Position
 @Composable
 fun GameScreen(
     onBackToStart: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isVsComputer: Boolean = false,
+    computerSmartness: Int = 0
 ) {
     var gameState by remember { mutableStateOf(GameState()) }
     val logic = remember { Logic() }
+
+    LaunchedEffect(gameState.currentPlayer, gameState.status) {
+        if (isVsComputer && 
+            gameState.currentPlayer == Player.LIGHT && 
+            gameState.status != hu.keszeglab.webmill.model.GameStatus.FINISHED) {
+            kotlinx.coroutines.delay(500)
+            
+            val move = hu.keszeglab.webmill.model.AIPlayer.calculateComputerMove(gameState, computerSmartness)
+            if (move != null) {
+                val (from, to) = move
+                gameState = logic.makeMove(gameState, from, to)
+            }
+        }
+    }
 
     Box(
         modifier = modifier
